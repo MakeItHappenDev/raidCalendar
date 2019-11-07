@@ -43,7 +43,7 @@ export default () => {
 
     return (
         <>
-            <h1 style={{textAlign:'center'}}>Calendar</h1>
+            <h1 style={{textAlign:'center'}}>My raid Scheduler</h1>
             {resetArray.map((r,i)=><Reset key={`${r.name}-${i}`} {...r}/>)}
         </>
     )
