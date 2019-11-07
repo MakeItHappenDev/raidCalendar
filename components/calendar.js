@@ -1,4 +1,5 @@
 import React from 'react'
+import Byod from './byod'
 
 //extend Date
 Date.prototype.addDays = function(days){
@@ -14,7 +15,7 @@ const sortByDate = (a,b) => {
 }
 
 
-export default () => {
+export default (props) => {
 
     //date variables
     const firstMoltenCore = new Date(Date.UTC(2019,7,28,8,0,0))
@@ -39,10 +40,22 @@ export default () => {
     const moltenCores = getResets('MoltenCore',7,firstMoltenCore,endDay)
     const onyxias = getResets('Onyxia',5,firstOnyxia,endDay)
 
-    const resetArray = moltenCores.concat(onyxias).sort(sortByDate)
+    let resetArray = []
+    if(props.raids){
+        const raids = props.raids
+        raids.forEach(r => {
+            r.date = new Date(r.string)
+        });
+        resetArray = moltenCores.concat(onyxias).concat(raids).sort(sortByDate)
+    }
+    else{
+        resetArray = moltenCores.concat(onyxias).sort(sortByDate)
+    }
+
 
     return (
         <>
+            {!props.byod && <Byod/>}
             <h1 style={{textAlign:'center'}}>My raid Scheduler</h1>
             {resetArray.map((r,i)=><Reset key={`${r.name}-${i}`} {...r}/>)}
         </>
