@@ -1,17 +1,21 @@
-export default (req,res) => {
+import {Base64} from 'js-base64'
 
-    //Database connect req.headers["database"]
-    res.json([
-        {
-            name:req.headers["database"],
-            string:"Thu 09 Nov 2019 21:00:00 GMT" 
-        },
-        {
-            name:"raid Molten Core",
-            string:"Thu 14 Nov 2019 21:00:00 GMT"
-        },{
-            name:"raid Molten Core",
-            string:"Thu 21 Nov 2019 21:00:00 GMT"
-        },
-    ])
+import connect from '../../helpers/connect'
+import raidSchema from '../../helpers/raidSchema'
+import processRaid from '../../helpers/processRaid'
+
+export default async (req,res) => {
+
+    try {
+        const database = Base64.decode(req.headers["database"])
+        const conn = connect(database)
+        const Raid = conn.model('Raid',raidSchema)
+
+        const fetchedRaids = await Raid.find()
+        res.json({data:fetchedRaids.map(processRaid)})
+        return
+    } catch (error) {
+        res.json({data:[],error:error.toString()})
+        return
+    }
 }

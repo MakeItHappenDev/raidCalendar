@@ -44,7 +44,8 @@ export default (props) => {
     if(props.raids){
         const raids = props.raids
         raids.forEach(r => {
-            r.date = new Date(r.string)
+            r.string = new Date(r.date).toUTCString()
+            r.date = new Date(r.date)
         });
         resetArray = moltenCores.concat(onyxias).concat(raids).sort(sortByDate)
     }
